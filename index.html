@@ -99,17 +99,20 @@
         }
       }, 1000);
     }
-// Buy items with GG Game Gems
-function buyItem(item, price) {
-  if (currency >= 200) {  // Mengubah harga beli menjadi 200
-    currency -= 200;  // Mengurangi currency sesuai harga beli
-    grassCount++;  // Menambah jumlah rumput
-    localStorage.setItem('currency', currency);
+//buy section
+    function buyGrassWithGG() {
+  const priceInGG = 1;  // 1 GG Game Gem untuk 200 rumput
+  const grassToBuy = 200;
+
+  if (ggGems >= priceInGG) {  // Mengecek apakah GG cukup
+    ggGems -= priceInGG;  // Mengurangi GG Game Gems
+    grassCount += grassToBuy;  // Menambah rumput
+    localStorage.setItem('ggGems', ggGems);
     localStorage.setItem('grassCount', grassCount);
-    alert(`Kamu membeli 1 ${item} dengan harga 200 kredit.`);
+    alert(`Kamu membeli ${grassToBuy} rumput dengan 1 GG Game Gem.`);
     updateDisplay();
   } else {
-    alert('Kredit tidak cukup untuk membeli.');
+    alert('GG Game Gems tidak cukup untuk membeli rumput.');
   }
 }
 // Selling items and converting them into GG Game Gems
