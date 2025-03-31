@@ -27,7 +27,7 @@
       <tbody>
         <tr>
           <td>Grass</td>
-          <td>200/1</td>
+          <td>1000/1</td>
           <td>
             <button class="btn" onclick="buyItem('Grass', 200)">Buy</button>
             <button class="btn" onclick="sellItem('Grass', 200)">Sell</button>
@@ -114,24 +114,24 @@
       }
     }
 
-    // Selling items
-function sellItem(item, price) {
-  const sellRate = 1000;  // 1000 grass per 1 credit
+    // Selling items and converting them into GG Game Gems
+    function sellItem(item, price) {
+      const sellRate = 1000;  // 1000 grass for 1 GG Game Gem
 
-  if (grassCount >= sellRate) {  // Pastikan Anda memiliki cukup grass
-    const sellPrice = 1;  // Harga jual per 1000 grass adalah 1 credit
-    grassCount -= sellRate;  // Kurangi jumlah grass
-    currency += sellPrice;  // Tambahkan 1 credit untuk setiap 1000 grass yang dijual
-    localStorage.setItem('currency', currency);  // Simpan nilai currency baru ke localStorage
-    localStorage.setItem('grassCount', grassCount);  // Simpan nilai grassCount baru ke localStorage
-    alert(`You sold ${sellRate} ${item} for ${sellPrice} credit.`);  // Menampilkan pesan sukses
-    updateDisplay();  // Perbarui tampilan
-  } else {
-    alert('You do not have enough grass to sell.');  // Jika tidak cukup grass, tampilkan peringatan
-  }
-}
+      if (grassCount >= sellRate) {  // Check if you have enough grass
+        const ggGemsEarned = Math.floor(grassCount / sellRate);  // Calculate how many GG Gems you will earn
+        grassCount -= ggGemsEarned * sellRate;  // Deduct the amount of grass sold
+        ggGems += ggGemsEarned;  // Add the earned GG Gems
+        localStorage.setItem('ggGems', ggGems);  // Save the updated GG Gems in localStorage
+        localStorage.setItem('grassCount', grassCount);  // Save the updated grass count in localStorage
+        alert(`You sold ${ggGemsEarned * sellRate} ${item} for ${ggGemsEarned} GG Game Gems.`);  // Success message
+        updateDisplay();  // Update the display
+      } else {
+        alert('You do not have enough grass to sell.');  // Warning message if not enough grass
+      }
+    }
 
-// Converting Credits to GG GAME GEMS
+    // Converting Credits to GG GAME GEMS
     function convertCreditsToGG() {
       const conversionRate = 2000;
       if (currency >= conversionRate) {
@@ -163,7 +163,7 @@ function sellItem(item, price) {
       }
     }
 
-    // Fungsi untuk reset data user
+    // Function to reset user data
     function reset() {
       grassCount = 0;
       currency = 0;
@@ -171,24 +171,24 @@ function sellItem(item, price) {
       localStorage.setItem('currency', currency);
       localStorage.setItem('grassCount', grassCount);
       localStorage.setItem('ggGems', ggGems);
-      alert('Data telah direset!');
+      alert('Data has been reset!');
       updateDisplay();
     }
 
-    // Fungsi admin untuk reset semua data
+    // Admin function to reset all data
     function adminResetAll() {
       const adminPassword = "admin123";
-      const enteredPassword = prompt("Masukkan password admin untuk reset semuanya:");
+      const enteredPassword = prompt("Enter admin password to reset everything:");
 
       if (enteredPassword === adminPassword) {
         grassCount = 0;
         currency = 0;
         ggGems = 0;
-        localStorage.clear();  // Menghapus semua data dari localStorage
-        alert('Semua data telah direset!');
+        localStorage.clear();  // Clear all data from localStorage
+        alert('All data has been reset!');
         updateDisplay();
       } else {
-        alert('Password salah! Anda tidak memiliki hak untuk mereset semuanya.');
+        alert('Incorrect password! You do not have permission to reset everything.');
       }
     }
 
