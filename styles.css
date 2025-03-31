@@ -6,18 +6,19 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  background: #0d0d0d;
   color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   height: 100vh;
+  width: 100vw;
   overflow: hidden;
   position: relative;
   background: radial-gradient(circle, rgba(13, 13, 13, 1) 0%, rgba(5, 5, 5, 1) 100%);
 }
 
+/* Galaxy background */
 body::before {
   content: '';
   position: absolute;
@@ -42,6 +43,7 @@ body::before {
   position: relative;
   overflow: hidden;
   animation: glowing 2s infinite alternate;
+  z-index: 1; /* Ensure container is above the background */
 }
 
 h1 {
