@@ -4,17 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grass Simulator - Futuristic Farming</title>
-  <link rel="stylesheet" href="styles.css"> <!-- Menyertakan file CSS -->
 </head>
 <body>
 
   <div class="container">
     <h1>Grass Simulator - Futuristic Farming</h1>
 
-    <p id="currency">Currency: 0 Credits</p>
-    <p id="grassCount">Grass: 0</p>
-    <p id="timer">Next Grass Growth: 5s</p>
-    <p id="ggGems">GG GAME GEMS: 0</p> <!-- Menambahkan tampilan GG GAME GEMS -->
+    <p id="currency" class="info">Currency: 0 Credits</p>
+    <p id="grassCount" class="info">Grass: 0</p>
+    <p id="timer" class="info">Next Grass Growth: 5s</p>
+    <p id="ggGems" class="info">GG GAME GEMS: 0</p>
 
     <table class="item-table">
       <thead>
@@ -40,7 +39,6 @@
             <button class="btn" onclick="convertCreditsToGG()">Convert</button>
           </td>
         </tr>
-        <!-- Tombol Admin Grass -->
         <tr>
           <td>Admin Add Grass</td>
           <td>-</td>
@@ -52,7 +50,104 @@
     </table>
   </div>
 
-  <script src="script.js"></script> <!-- Menyertakan file JavaScript -->
+  <script>
+    let currency = parseInt(localStorage.getItem('currency')) || 0;
+    let ggGems = parseInt(localStorage.getItem('ggGems')) || 0;
+    let grassCount = parseInt(localStorage.getItem('grassCount')) || 0;
+    let grassGrowthRate = 0.01;
+    let grassGrowthTime = 5;
+
+    // Update display
+    function updateDisplay() {
+      document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
+      document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
+      document.getElementById('timer').textContent = `Next Grass Growth: ${grassGrowthTime}s`;
+      document.getElementById('ggGems').textContent = `GG GAME GEMS: ${ggGems}`;
+    }
+
+    // Grass growth mechanism
+    function growGrass() {
+      setInterval(() => {
+        if (grassGrowthTime > 0) {
+          grassGrowthTime--;
+          updateDisplay();
+        } else {
+          if (grassCount >= 1000) {
+            grassGrowthRate = 0.5;
+          } else if (grassCount >= 200) {
+            grassGrowthRate = 0.1;
+          }
+          grassCount += grassGrowthRate;
+          grassGrowthTime = 5;
+          updateDisplay();
+        }
+      }, 1000);
+    }
+
+    // Buying items
+    function buyItem(item, price) {
+      if (currency >= price) {
+        currency -= price;
+        grassCount++;
+        localStorage.setItem('currency', currency);
+        localStorage.setItem('grassCount', grassCount);
+        alert(`You bought 1 ${item} for ${price} credits.`);
+        updateDisplay();
+      } else {
+        alert('Not enough credits to buy.');
+      }
+    }
+
+    // Selling items
+    function sellItem(item, price) {
+      if (grassCount > 0) {
+        currency += price;
+        grassCount--;
+        localStorage.setItem('currency', currency);
+        localStorage.setItem('grassCount', grassCount);
+        alert(`You sold 1 ${item} for ${price} credits.`);
+        updateDisplay();
+      } else {
+        alert('You have no grass to sell.');
+      }
+    }
+
+    // Converting Credits to GG GAME GEMS
+    function convertCreditsToGG() {
+      const conversionRate = 2000;
+      if (currency >= conversionRate) {
+        const ggGemsToConvert = Math.floor(currency / conversionRate);
+        currency -= ggGemsToConvert * conversionRate;
+        ggGems += ggGemsToConvert;
+        localStorage.setItem('currency', currency);
+        localStorage.setItem('ggGems', ggGems);
+        alert(`You converted ${ggGemsToConvert} GG GAME GEMS!`);
+        updateDisplay();
+      } else {
+        alert('Not enough credits to convert to GG GAME GEMS.');
+      }
+    }
+
+    // Admin function to add grass
+    function adminAddGrass() {
+      const adminPassword = "admin123";
+      const enteredPassword = prompt("Please enter the admin password to add grass:");
+
+      if (enteredPassword === adminPassword) {
+        const amountToAdd = 500;
+        grassCount += amountToAdd;
+        localStorage.setItem('grassCount', grassCount);
+        alert(`${amountToAdd} grass has been added!`);
+        updateDisplay();
+      } else {
+        alert('Incorrect password! You are not authorized to add grass.');
+      }
+    }
+
+    // Initialize grass growth and display
+    growGrass();
+    updateDisplay();
+  </script>
 
 </body>
 </html>
