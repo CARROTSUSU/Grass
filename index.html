@@ -115,19 +115,21 @@
 
     // Selling items
 function sellItem(item, price) {
-  const sellPrice = 1000;  // Tentukan harga jual per 1 grass adalah 1000
+  const sellRate = 1000;  // 1000 grass per 1 credit
 
-  if (grassCount > 0) {
-    currency += sellPrice; // Tambahkan sellPrice ke currency
-    grassCount--; // Kurangi jumlah grass
-    localStorage.setItem('currency', currency); // Simpan nilai currency baru ke localStorage
-    localStorage.setItem('grassCount', grassCount); // Simpan nilai grassCount baru ke localStorage
-    alert(`You sold 1 ${item} for ${sellPrice} credits.`); // Menampilkan pesan sukses
-    updateDisplay(); // Perbarui tampilan
+  if (grassCount >= sellRate) {  // Pastikan Anda memiliki cukup grass
+    const sellPrice = 1;  // Harga jual per 1000 grass adalah 1 credit
+    grassCount -= sellRate;  // Kurangi jumlah grass
+    currency += sellPrice;  // Tambahkan 1 credit untuk setiap 1000 grass yang dijual
+    localStorage.setItem('currency', currency);  // Simpan nilai currency baru ke localStorage
+    localStorage.setItem('grassCount', grassCount);  // Simpan nilai grassCount baru ke localStorage
+    alert(`You sold ${sellRate} ${item} for ${sellPrice} credit.`);  // Menampilkan pesan sukses
+    updateDisplay();  // Perbarui tampilan
   } else {
-    alert('You have no grass to sell.'); // Jika tidak ada grass, tampilkan peringatan
+    alert('You do not have enough grass to sell.');  // Jika tidak cukup grass, tampilkan peringatan
   }
 }
+
  // Selling items
 function sellItem(item, price) {
   const sellPrice = 1000;  // Tentukan harga jual per 1 grass adalah 1000
