@@ -4,119 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grass Simulator - Futuristic Farming</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Arial', sans-serif;
-      background: #121212;
-      color: #ffffff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .container {
-      background: linear-gradient(135deg, #1a1a1a, #333);
-      border-radius: 20px;
-      padding: 40px;
-      width: 80%;
-      max-width: 800px;
-      box-shadow: 0 4px 30px rgba(0, 255, 0, 0.1);
-      text-align: center;
-      position: relative;
-      animation: glowing 1.5s infinite alternate;
-    }
-
-    h1 {
-      font-size: 3rem;
-      color: #00ff00;
-      text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
-      margin-bottom: 20px;
-    }
-
-    .item-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    .item-table th, .item-table td {
-      padding: 15px;
-      text-align: center;
-      border: 2px solid #00ff00;
-    }
-
-    .item-table th {
-      background-color: #333;
-      color: #00ff00;
-      font-size: 1.2rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .item-table td {
-      background-color: #222;
-      font-size: 1.1rem;
-    }
-
-    .item-table .btn {
-      background: #00ff00;
-      color: #121212;
-      border: none;
-      padding: 12px 25px;
-      font-size: 1.2rem;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .item-table .btn:hover {
-      background: #009900;
-      box-shadow: 0 0 20px #00ff00;
-      transform: scale(1.05);
-    }
-
-    .item-table .btn:active {
-      transform: scale(0.95);
-    }
-
-    @keyframes glowing {
-      0% {
-        text-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00, 0 0 45px #00ff00;
-      }
-      50% {
-        text-shadow: 0 0 25px #00ff00, 0 0 50px #00ff00, 0 0 75px #00ff00;
-      }
-      100% {
-        text-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00, 0 0 45px #00ff00;
-      }
-    }
-
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2rem;
-      }
-
-      .item-table td {
-        font-size: 1rem;
-      }
-
-      .item-table .btn {
-        padding: 10px 20px;
-        font-size: 1rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css"> <!-- Menyertakan file CSS -->
 </head>
 <body>
 
@@ -126,6 +14,7 @@
     <p id="currency">Currency: 0 Credits</p>
     <p id="grassCount">Grass: 0</p>
     <p id="timer">Next Grass Growth: 5s</p>
+    <p id="ggGems">GG GAME GEMS: 0</p> <!-- Menambahkan tampilan GG GAME GEMS -->
 
     <table class="item-table">
       <thead>
@@ -144,78 +33,18 @@
             <button class="btn" onclick="sellItem('Grass', 200)">Sell</button>
           </td>
         </tr>
+        <tr>
+          <td>Convert to GG GAME GEMS</td>
+          <td>-</td>
+          <td>
+            <button class="btn" onclick="convertCreditsToGG()">Convert</button>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
 
-  <script>
-    let currency = parseInt(localStorage.getItem('currency')) || 0;
-    let grassCount = parseInt(localStorage.getItem('grassCount')) || 0;
-    let grassGrowthRate = 0.01; // Pertumbuhan per detik
-    let grassGrowthTime = 5; // Waktu dalam detik untuk tumbuh
-
-    // Memperbarui tampilan
-    function updateDisplay() {
-      document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
-      document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
-      document.getElementById('timer').textContent = `Next Grass Growth: ${grassGrowthTime}s`;
-    }
-
-    // Fungsi untuk menumbuhkan rumput
-    function growGrass() {
-      setInterval(() => {
-        if (grassGrowthTime > 0) {
-          grassGrowthTime--;
-          updateDisplay();
-        } else {
-          if (grassCount >= 1000) {
-            grassGrowthRate = 0.5; // Jika mencapai 1000, tumbuh lebih cepat
-          } else if (grassCount >= 200) {
-            grassGrowthRate = 0.1; // Jika mencapai 200, tumbuh lebih cepat
-          }
-          grassCount += grassGrowthRate; // Menambah rumput berdasarkan growth rate
-          grassGrowthTime = 5; // Reset timer setelah tumbuh
-          alert('Grass has grown! You can collect it now.');
-          updateDisplay();
-        }
-      }, 1000);
-    }
-
-    // Fungsi untuk membeli rumput
-    function buyItem(item, price) {
-      if (currency >= price) {
-        currency -= price;
-        grassCount++;
-        localStorage.setItem('currency', currency);
-        localStorage.setItem('grassCount', grassCount);
-        alert(`You bought 1 ${item} for ${price} credits.`);
-        updateDisplay();
-      } else {
-        alert('Not enough credits to buy.');
-      }
-    }
-
-    // Fungsi untuk menjual rumput
-    function sellItem(item, price) {
-      if (grassCount > 0) {
-        currency += price;
-        grassCount--;
-        localStorage.setItem('currency', currency);
-        localStorage.setItem('grassCount', grassCount);
-        alert(`You sold 1 ${item} for ${price} credits.`);
-        updateDisplay();
-      } else {
-        alert('You have no grass to sell.');
-      }
-    }
-
-    // Mulai menumbuhkan rumput saat halaman dimuat
-    growGrass();
-
-    // Memperbarui tampilan awal
-    updateDisplay();
-  </script>
+  <script src="script.js"></script> <!-- Menyertakan file JavaScript -->
 
 </body>
-  </html>
-  
+</html>
