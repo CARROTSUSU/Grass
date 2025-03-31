@@ -64,6 +64,9 @@
         </tr>
       </tbody>
     </table>
+
+    <p id="status" class="info">Status: Stay ALIVE</p>
+    <button id="aliveBtn" class="btn" onclick="toggleAlive()">Stay ALIVE</button>
   </div>
 
   <script>
@@ -73,8 +76,6 @@
     let grassGrowthRate = 0.01;
     let grassGrowthTime = 5;
     let isAlive = localStorage.getItem('isAlive') === 'true'; // Cek status hidup dari localStorage
-
-    
 
     // Update display
     function updateDisplay() {
@@ -102,23 +103,25 @@
         }
       }, 1000);
     }
-//buy section
-    function buyGrassWithGG() {
-  const priceInGG = 1;  // 1 GG Game Gem untuk 200 rumput
-  const grassToBuy = 200;
 
-  if (ggGems >= priceInGG) {  // Mengecek apakah GG cukup
-    ggGems -= priceInGG;  // Mengurangi GG Game Gems
-    grassCount += grassToBuy;  // Menambah rumput
-    localStorage.setItem('ggGems', ggGems);
-    localStorage.setItem('grassCount', grassCount);
-    alert(`You bought ${grassToBuy} for grass with 1 GG.`);
-    updateDisplay();
-  } else {
-    alert('You do not have enough GG');
-  }
-}
-// Selling items and converting them into GG Game Gems
+    // Buy Grass with GG
+    function buyGrassWithGG() {
+      const priceInGG = 1;  // 1 GG Game Gem untuk 200 rumput
+      const grassToBuy = 200;
+
+      if (ggGems >= priceInGG) {  // Mengecek apakah GG cukup
+        ggGems -= priceInGG;  // Mengurangi GG Game Gems
+        grassCount += grassToBuy;  // Menambah rumput
+        localStorage.setItem('ggGems', ggGems);
+        localStorage.setItem('grassCount', grassCount);
+        alert(`You bought ${grassToBuy} for grass with 1 GG.`);
+        updateDisplay();
+      } else {
+        alert('You do not have enough GG');
+      }
+    }
+
+    // Selling items and converting them into GG Game Gems
     function sellItem(item, price) {
       const sellRate = 1000;  // 1000 grass for 1 GG Game Gem
 
@@ -135,22 +138,22 @@
       }
     }
 
-    // Mengonversi GG GAME GEMS ke Credits
-function convertGGToCredits() {
-  const conversionRate = 2000;  // 1 GG Game Gem = 100 Credits
-  if (ggGems >= 1) {  // Mengecek apakah ada GG Game Gems untuk dikonversi
-    const creditsToConvert = ggGems * conversionRate;  // Menghitung jumlah Credits yang akan diperoleh
-    currency += creditsToConvert;  // Menambah Credits
-    ggGems = 0;  // Mengosongkan GG Gems setelah konversi
-    localStorage.setItem('currency', currency);  // Menyimpan Credits yang diperbarui
-    localStorage.setItem('ggGems', ggGems);  // Menyimpan GG Gems yang diperbarui (jadi 0)
-    alert(`You Get ${creditsToConvert} CREDITS From Swap!`);  // Menampilkan pesan sukses
-    updateDisplay();  // Memperbarui tampilan
-  } else {
-    alert('You dont have enough GG to Exchange.');  // Pesan jika tidak cukup GG Game Gems
-  }
-}
-    
+    // Convert GG to Credits
+    function convertGGToCredits() {
+      const conversionRate = 2000;  // 1 GG Game Gem = 100 Credits
+      if (ggGems >= 1) {  // Mengecek apakah ada GG Game Gems untuk dikonversi
+        const creditsToConvert = ggGems * conversionRate;  // Menghitung jumlah Credits yang akan diperoleh
+        currency += creditsToConvert;  // Menambah Credits
+        ggGems = 0;  // Mengosongkan GG Gems setelah konversi
+        localStorage.setItem('currency', currency);  // Menyimpan Credits yang diperbarui
+        localStorage.setItem('ggGems', ggGems);  // Menyimpan GG Gems yang diperbarui (jadi 0)
+        alert(`You Get ${creditsToConvert} CREDITS From Swap!`);  // Menampilkan pesan sukses
+        updateDisplay();  // Memperbarui tampilan
+      } else {
+        alert('You dont have enough GG to Exchange.');  // Pesan jika tidak cukup GG Game Gems
+      }
+    }
+
     // Admin function to add grass
     function adminAddGrass() {
       const adminPassword = "admin123";
@@ -200,40 +203,33 @@ function convertGGToCredits() {
     growGrass();
     updateDisplay();
 
-        // Fungsi untuk memperbarui status
+    // Fungsi untuk memperbarui status
     function updateAliveStatus() {
       const statusElement = document.getElementById('status');
-    let isAlive = localStorage.getItem('isAlive') === 'true'; // Ambil status dari localStorage
+      const aliveBtn = document.getElementById('aliveBtn');
+      
+      if (isAlive) {
+        statusElement.textContent = "Status: Stay ALIVE";
+        aliveBtn.classList.remove('dead');
+        aliveBtn.classList.add('alive');
+      } else {
+        statusElement.textContent = "Status: DEAD";
+        aliveBtn.classList.remove('alive');
+        aliveBtn.classList.add('dead');
+      }
+    }
 
-// Fungsi untuk memperbarui status
-function updateAliveStatus() {
-  const statusElement = document.getElementById('status');
-  const aliveBtn = document.getElementById('aliveBtn');
-  
-  if (isAlive) {
-    statusElement.textContent = "Status: Stay ALIVE";
-    aliveBtn.classList.remove('dead');
-    aliveBtn.classList.add('alive');
-  } else {
-    statusElement.textContent = "Status: DEAD";
-    aliveBtn.classList.remove('alive');
-    aliveBtn.classList.add('dead');
-  }
-}
+    // Fungsi untuk toggle status hidup
+    function toggleAlive() {
+      isAlive = !isAlive; // Ubah status
+      localStorage.setItem('isAlive', isAlive); // Simpan status ke localStorage
+      updateAliveStatus(); // Perbarui tampilan
+    }
 
-// Fungsi untuk toggle status hidup
-function toggleAlive() {
-  isAlive = !isAlive; // Ubah status
-  localStorage.setItem('isAlive', isAlive); // Simpan status ke localStorage
-  updateAliveStatus(); // Perbarui tampilan
-}
-
-// Memperbarui tampilan status saat pertama kali dimuat
-updateAliveStatus();
+    // Memperbarui tampilan status saat pertama kali dimuat
+    updateAliveStatus();
     
   </script>
 
 </body>
-    <p id="status" class="info">Status: Stay ALIVE</p>
-  <button id="aliveBtn" class="btn" onclick="toggleAlive()">Stay ALIVE</button>
 </html>
