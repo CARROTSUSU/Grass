@@ -37,7 +37,7 @@
           <td>Convert to GG GAME GEMS</td>
           <td>-</td>
           <td>
-            <button class="btn" onclick="convertCreditsToGG()">Convert</button>
+            <button class="btn" onclick="convertGGToCredits()">Convert</button>
           </td>
         </tr>
         <tr>
@@ -132,22 +132,22 @@
       }
     }
 
-    // Converting Credits to GG GAME GEMS
-    function convertCreditsToGG() {
-      const conversionRate = 2000;
-      if (currency >= conversionRate) {
-        const ggGemsToConvert = Math.floor(currency / conversionRate);
-        currency -= ggGemsToConvert * conversionRate;
-        ggGems += ggGemsToConvert;
-        localStorage.setItem('currency', currency);
-        localStorage.setItem('ggGems', ggGems);
-        alert(`You converted ${ggGemsToConvert} GG GAME GEMS!`);
-        updateDisplay();
-      } else {
-        alert('Not enough credits to convert to GG GAME GEMS.');
-      }
-    }
-
+    // Mengonversi GG GAME GEMS ke Credits
+function convertGGToCredits() {
+  const conversionRate = 100;  // 1 GG Game Gem = 100 Credits
+  if (ggGems >= 1) {  // Mengecek apakah ada GG Game Gems untuk dikonversi
+    const creditsToConvert = ggGems * conversionRate;  // Menghitung jumlah Credits yang akan diperoleh
+    currency += creditsToConvert;  // Menambah Credits
+    ggGems = 0;  // Mengosongkan GG Gems setelah konversi
+    localStorage.setItem('currency', currency);  // Menyimpan Credits yang diperbarui
+    localStorage.setItem('ggGems', ggGems);  // Menyimpan GG Gems yang diperbarui (jadi 0)
+    alert(`Anda mengonversi ${creditsToConvert} Credits dari GG GAME GEMS!`);  // Menampilkan pesan sukses
+    updateDisplay();  // Memperbarui tampilan
+  } else {
+    alert('You dont have enough GG to Exchange.');  // Pesan jika tidak cukup GG Game Gems
+  }
+}
+    
     // Admin function to add grass
     function adminAddGrass() {
       const adminPassword = "admin123";
