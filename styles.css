@@ -28,7 +28,7 @@ body::before {
   bottom: 0;
   background: url('https://source.unsplash.com/1600x900/?galaxy,space') no-repeat center center fixed;
   background-size: cover;
-  z-index: -1;
+  z-index: -2;
   animation: starfield 50s infinite linear;
 }
 
@@ -43,7 +43,7 @@ body::before {
   position: relative;
   overflow: hidden;
   animation: glowing 2s infinite alternate;
-  z-index: 1; /* Ensure container is above the background */
+  z-index: 1; /* Ensures the container is above the background */
 }
 
 h1 {
