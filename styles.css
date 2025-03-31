@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  background: #121212;
+  background: #0d0d0d;
   color: #ffffff;
   display: flex;
   justify-content: center;
@@ -14,69 +14,83 @@ body {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  background: radial-gradient(circle, rgba(13, 13, 13, 1) 0%, rgba(5, 5, 5, 1) 100%);
 }
 
 .container {
   background: linear-gradient(135deg, #1a1a1a, #333);
-  border-radius: 20px;
-  padding: 40px;
+  border-radius: 30px;
+  padding: 50px;
   width: 80%;
-  max-width: 800px;
-  box-shadow: 0 4px 30px rgba(0, 255, 0, 0.1);
+  max-width: 850px;
+  box-shadow: 0 15px 60px rgba(0, 255, 0, 0.2), 0 15px 40px rgba(0, 255, 0, 0.4);
   text-align: center;
   position: relative;
-  animation: glowing 1.5s infinite alternate;
+  overflow: hidden;
+  animation: glowing 2s infinite alternate;
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: 3.5rem;
   color: #00ff00;
-  text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
-  margin-bottom: 20px;
+  text-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00, 0 0 50px #00ff00, 0 0 100px #00ff00;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+  font-family: 'Orbitron', sans-serif;
+  animation: pulse 3s infinite;
 }
 
 .item-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .item-table th, .item-table td {
-  padding: 15px;
+  padding: 18px;
   text-align: center;
   border: 2px solid #00ff00;
+  background-color: #222;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .item-table th {
   background-color: #333;
   color: #00ff00;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .item-table td {
-  background-color: #222;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.item-table tr:hover {
+  transform: scale(1.05);
+  background-color: #444;
 }
 
 .item-table .btn {
   background: #00ff00;
   color: #121212;
   border: none;
-  padding: 12px 25px;
-  font-size: 1.2rem;
-  border-radius: 30px;
+  padding: 14px 30px;
+  font-size: 1.4rem;
+  border-radius: 50px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: all 0.4s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .item-table .btn:hover {
   background: #009900;
-  box-shadow: 0 0 20px #00ff00;
-  transform: scale(1.05);
+  box-shadow: 0 0 25px #00ff00, 0 0 50px #00ff00;
+  transform: scale(1.1) rotate(5deg);
 }
 
 .item-table .btn:active {
@@ -85,19 +99,31 @@ h1 {
 
 @keyframes glowing {
   0% {
-    text-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00, 0 0 45px #00ff00;
+    text-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00, 0 0 60px #00ff00;
   }
   50% {
-    text-shadow: 0 0 25px #00ff00, 0 0 50px #00ff00, 0 0 75px #00ff00;
+    text-shadow: 0 0 40px #00ff00, 0 0 80px #00ff00, 0 0 100px #00ff00;
   }
   100% {
-    text-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00, 0 0 45px #00ff00;
+    text-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00, 0 0 60px #00ff00;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
 @media (max-width: 768px) {
   h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 
   .item-table td {
@@ -105,7 +131,7 @@ h1 {
   }
 
   .item-table .btn {
-    padding: 10px 20px;
-    font-size: 1rem;
+    padding: 12px 25px;
+    font-size: 1.2rem;
   }
 }
