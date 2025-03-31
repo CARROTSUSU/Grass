@@ -72,6 +72,9 @@
     let grassCount = parseInt(localStorage.getItem('grassCount')) || 0;
     let grassGrowthRate = 0.01;
     let grassGrowthTime = 5;
+    let isAlive = localStorage.getItem('isAlive') === 'true'; // Cek status hidup dari localStorage
+
+    
 
     // Update display
     function updateDisplay() {
@@ -197,33 +200,36 @@ function convertGGToCredits() {
     growGrass();
     updateDisplay();
 
-        let isAlive = localStorage.getItem('isAlive') === 'true'; // Cek status hidup dari localStorage
-
-    // Fungsi untuk memperbarui status
+        // Fungsi untuk memperbarui status
     function updateAliveStatus() {
       const statusElement = document.getElementById('status');
-      const aliveBtn = document.getElementById('aliveBtn');
-      
-      if (isAlive) {
-        statusElement.textContent = "Status: Stay ALIVE";
-        aliveBtn.classList.remove('dead');
-        aliveBtn.classList.add('alive');
-      } else {
-        statusElement.textContent = "Status: DEAD";
-        aliveBtn.classList.remove('alive');
-        aliveBtn.classList.add('dead');
-      }
-    }
+    let isAlive = localStorage.getItem('isAlive') === 'true'; // Ambil status dari localStorage
 
-    // Fungsi untuk toggle status hidup
-    function toggleAlive() {
-      isAlive = !isAlive; // Ubah status
-      localStorage.setItem('isAlive', isAlive); // Simpan status ke localStorage
-      updateAliveStatus(); // Perbarui tampilan
-    }
+// Fungsi untuk memperbarui status
+function updateAliveStatus() {
+  const statusElement = document.getElementById('status');
+  const aliveBtn = document.getElementById('aliveBtn');
+  
+  if (isAlive) {
+    statusElement.textContent = "Status: Stay ALIVE";
+    aliveBtn.classList.remove('dead');
+    aliveBtn.classList.add('alive');
+  } else {
+    statusElement.textContent = "Status: DEAD";
+    aliveBtn.classList.remove('alive');
+    aliveBtn.classList.add('dead');
+  }
+}
 
-    // Memperbarui tampilan status saat pertama kali dimuat
-    updateAliveStatus();
+// Fungsi untuk toggle status hidup
+function toggleAlive() {
+  isAlive = !isAlive; // Ubah status
+  localStorage.setItem('isAlive', isAlive); // Simpan status ke localStorage
+  updateAliveStatus(); // Perbarui tampilan
+}
+
+// Memperbarui tampilan status saat pertama kali dimuat
+updateAliveStatus();
     
   </script>
 
