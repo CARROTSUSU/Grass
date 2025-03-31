@@ -26,7 +26,6 @@ function growGrass() {
       }
       grassCount += grassGrowthRate; // Menambah rumput berdasarkan growth rate
       grassGrowthTime = 5; // Reset timer setelah tumbuh
-      alert('Grass has grown! You can collect it now.');
       updateDisplay();
     }
   }, 1000);
