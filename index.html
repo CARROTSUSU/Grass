@@ -196,6 +196,35 @@ function convertGGToCredits() {
     // Initialize grass growth and display
     growGrass();
     updateDisplay();
+
+        let isAlive = localStorage.getItem('isAlive') === 'true'; // Cek status hidup dari localStorage
+
+    // Fungsi untuk memperbarui status
+    function updateAliveStatus() {
+      const statusElement = document.getElementById('status');
+      const aliveBtn = document.getElementById('aliveBtn');
+      
+      if (isAlive) {
+        statusElement.textContent = "Status: Stay ALIVE";
+        aliveBtn.classList.remove('dead');
+        aliveBtn.classList.add('alive');
+      } else {
+        statusElement.textContent = "Status: DEAD";
+        aliveBtn.classList.remove('alive');
+        aliveBtn.classList.add('dead');
+      }
+    }
+
+    // Fungsi untuk toggle status hidup
+    function toggleAlive() {
+      isAlive = !isAlive; // Ubah status
+      localStorage.setItem('isAlive', isAlive); // Simpan status ke localStorage
+      updateAliveStatus(); // Perbarui tampilan
+    }
+
+    // Memperbarui tampilan status saat pertama kali dimuat
+    updateAliveStatus();
+    
   </script>
 
 </body>
