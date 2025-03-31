@@ -1,0 +1,111 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: #121212;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  background: linear-gradient(135deg, #1a1a1a, #333);
+  border-radius: 20px;
+  padding: 40px;
+  width: 80%;
+  max-width: 800px;
+  box-shadow: 0 4px 30px rgba(0, 255, 0, 0.1);
+  text-align: center;
+  position: relative;
+  animation: glowing 1.5s infinite alternate;
+}
+
+h1 {
+  font-size: 3rem;
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+  margin-bottom: 20px;
+}
+
+.item-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.item-table th, .item-table td {
+  padding: 15px;
+  text-align: center;
+  border: 2px solid #00ff00;
+}
+
+.item-table th {
+  background-color: #333;
+  color: #00ff00;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.item-table td {
+  background-color: #222;
+  font-size: 1.1rem;
+}
+
+.item-table .btn {
+  background: #00ff00;
+  color: #121212;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.item-table .btn:hover {
+  background: #009900;
+  box-shadow: 0 0 20px #00ff00;
+  transform: scale(1.05);
+}
+
+.item-table .btn:active {
+  transform: scale(0.95);
+}
+
+@keyframes glowing {
+  0% {
+    text-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00, 0 0 45px #00ff00;
+  }
+  50% {
+    text-shadow: 0 0 25px #00ff00, 0 0 50px #00ff00, 0 0 75px #00ff00;
+  }
+  100% {
+    text-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00, 0 0 45px #00ff00;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .item-table td {
+    font-size: 1rem;
+  }
+
+  .item-table .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+}
