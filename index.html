@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grass Simulator - Futuristic Farming</title>
   <style>
-    /* Reset some default styles */
     * {
       margin: 0;
       padding: 0;
@@ -91,7 +90,6 @@
       transform: scale(0.95);
     }
 
-    /* Futuristic Glowing Animation */
     @keyframes glowing {
       0% {
         text-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00, 0 0 45px #00ff00;
@@ -104,7 +102,6 @@
       }
     }
 
-    /* Responsive Styles */
     @media (max-width: 768px) {
       h1 {
         font-size: 2rem;
@@ -126,11 +123,10 @@
   <div class="container">
     <h1>Grass Simulator - Futuristic Farming</h1>
 
-    <p id="currency">Currency: 1000 Credits</p>
+    <p id="currency">Currency: 0 Credits</p>
     <p id="grassCount">Grass: 0</p>
     <p id="timer">Next Grass Growth: 5s</p>
 
-    <!-- Table of Items (Only Grass for now) -->
     <table class="item-table">
       <thead>
         <tr>
@@ -153,37 +149,45 @@
   </div>
 
   <script>
-    let currency = 1000;
-    let grassCount = 0;
-    let grassGrowthTime = 5; // seconds for grass to grow
+    let currency = parseInt(localStorage.getItem('currency')) || 0;
+    let grassCount = parseInt(localStorage.getItem('grassCount')) || 0;
+    let grassGrowthRate = 0.01; // Pertumbuhan per detik
+    let grassGrowthTime = 5; // Waktu dalam detik untuk tumbuh
 
-    // Update the displayed values
+    // Memperbarui tampilan
     function updateDisplay() {
       document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
       document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
       document.getElementById('timer').textContent = `Next Grass Growth: ${grassGrowthTime}s`;
     }
 
-    // Function for growing grass over time
+    // Fungsi untuk menumbuhkan rumput
     function growGrass() {
       setInterval(() => {
         if (grassGrowthTime > 0) {
           grassGrowthTime--;
           updateDisplay();
         } else {
-          grassCount++;
-          grassGrowthTime = 5; // Reset timer after growing grass
+          if (grassCount >= 1000) {
+            grassGrowthRate = 0.5; // Jika mencapai 1000, tumbuh lebih cepat
+          } else if (grassCount >= 200) {
+            grassGrowthRate = 0.1; // Jika mencapai 200, tumbuh lebih cepat
+          }
+          grassCount += grassGrowthRate; // Menambah rumput berdasarkan growth rate
+          grassGrowthTime = 5; // Reset timer setelah tumbuh
           alert('Grass has grown! You can collect it now.');
           updateDisplay();
         }
       }, 1000);
     }
 
-    // Logic for buying grass
+    // Fungsi untuk membeli rumput
     function buyItem(item, price) {
       if (currency >= price) {
         currency -= price;
         grassCount++;
+        localStorage.setItem('currency', currency);
+        localStorage.setItem('grassCount', grassCount);
         alert(`You bought 1 ${item} for ${price} credits.`);
         updateDisplay();
       } else {
@@ -191,11 +195,13 @@
       }
     }
 
-    // Logic for selling grass
+    // Fungsi untuk menjual rumput
     function sellItem(item, price) {
       if (grassCount > 0) {
         currency += price;
         grassCount--;
+        localStorage.setItem('currency', currency);
+        localStorage.setItem('grassCount', grassCount);
         alert(`You sold 1 ${item} for ${price} credits.`);
         updateDisplay();
       } else {
@@ -203,9 +209,13 @@
       }
     }
 
-    // Start growing grass when the page loads
+    // Mulai menumbuhkan rumput saat halaman dimuat
     growGrass();
+
+    // Memperbarui tampilan awal
+    updateDisplay();
   </script>
 
 </body>
-</html>
+  </html>
+  
