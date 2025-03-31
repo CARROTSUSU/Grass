@@ -46,6 +46,21 @@
             <button class="btn" onclick="adminAddGrass()">Add Grass</button>
           </td>
         </tr>
+        <!-- Add the new buttons here -->
+        <tr>
+          <td>Reset</td>
+          <td>-</td>
+          <td>
+            <button class="btn" onclick="reset()">Reset</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Admin Reset Semua</td>
+          <td>-</td>
+          <td>
+            <button class="btn" onclick="adminResetAll()">Admin Reset Semua</button>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -141,6 +156,35 @@
         updateDisplay();
       } else {
         alert('Incorrect password! You are not authorized to add grass.');
+      }
+    }
+
+    // Fungsi untuk reset data user
+    function reset() {
+      grassCount = 0;
+      currency = 0;
+      ggGems = 0;
+      localStorage.setItem('currency', currency);
+      localStorage.setItem('grassCount', grassCount);
+      localStorage.setItem('ggGems', ggGems);
+      alert('Data telah direset!');
+      updateDisplay();
+    }
+
+    // Fungsi admin untuk reset semua data
+    function adminResetAll() {
+      const adminPassword = "admin123";
+      const enteredPassword = prompt("Masukkan password admin untuk reset semuanya:");
+
+      if (enteredPassword === adminPassword) {
+        grassCount = 0;
+        currency = 0;
+        ggGems = 0;
+        localStorage.clear();  // Menghapus semua data dari localStorage
+        alert('Semua data telah direset!');
+        updateDisplay();
+      } else {
+        alert('Password salah! Anda tidak memiliki hak untuk mereset semuanya.');
       }
     }
 
