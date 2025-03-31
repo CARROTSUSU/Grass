@@ -114,18 +114,35 @@
     }
 
     // Selling items
-    function sellItem(item, price) {
-      if (grassCount > 0) {
-        currency += price;
-        grassCount--;
-        localStorage.setItem('currency', currency);
-        localStorage.setItem('grassCount', grassCount);
-        alert(`You sold 1 ${item} for ${price} credits.`);
-        updateDisplay();
-      } else {
-        alert('You have no grass to sell.');
-      }
-    }
+function sellItem(item, price) {
+  const sellPrice = 1000;  // Tentukan harga jual per 1 grass adalah 1000
+
+  if (grassCount > 0) {
+    currency += sellPrice; // Tambahkan sellPrice ke currency
+    grassCount--; // Kurangi jumlah grass
+    localStorage.setItem('currency', currency); // Simpan nilai currency baru ke localStorage
+    localStorage.setItem('grassCount', grassCount); // Simpan nilai grassCount baru ke localStorage
+    alert(`You sold 1 ${item} for ${sellPrice} credits.`); // Menampilkan pesan sukses
+    updateDisplay(); // Perbarui tampilan
+  } else {
+    alert('You have no grass to sell.'); // Jika tidak ada grass, tampilkan peringatan
+  }
+}
+ // Selling items
+function sellItem(item, price) {
+  const sellPrice = 1000;  // Tentukan harga jual per 1 grass adalah 1000
+
+  if (grassCount > 0) {
+    currency += sellPrice; // Tambahkan sellPrice ke currency
+    grassCount--; // Kurangi jumlah grass
+    localStorage.setItem('currency', currency); // Simpan nilai currency baru ke localStorage
+    localStorage.setItem('grassCount', grassCount); // Simpan nilai grassCount baru ke localStorage
+    alert(`You sold 1 ${item} for ${sellPrice} credits.`); // Menampilkan pesan sukses
+    updateDisplay(); // Perbarui tampilan
+  } else {
+    alert('You have no grass to sell.'); // Jika tidak ada grass, tampilkan peringatan
+  }
+}
 
     // Converting Credits to GG GAME GEMS
     function convertCreditsToGG() {
