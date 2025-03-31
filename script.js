@@ -62,7 +62,7 @@ function sellItem(item, price) {
 
 // Fungsi untuk menukar Credits menjadi GG GAME GEMS
 function convertCreditsToGG() {
-  const conversionRate = 100;  // 100 Credits = 1 GG GAME GEMS
+  const conversionRate = 2000;  // 2000 Credits = 1 GG GAME GEMS
   if (currency >= conversionRate) {
     const ggGemsToConvert = Math.floor(currency / conversionRate); // Hitung berapa GG yang bisa ditukar
     currency -= ggGemsToConvert * conversionRate; // Kurangi Credits yang digunakan untuk konversi
@@ -73,6 +73,22 @@ function convertCreditsToGG() {
     updateDisplay();
   } else {
     alert('Not enough credits to convert to GG GAME GEMS.');
+  }
+}
+
+// Fungsi untuk menambahkan grass (Admin only)
+function adminAddGrass() {
+  const adminPassword = "admin123"; // Kata sandi admin
+  const enteredPassword = prompt("Please enter the admin password to add grass:");
+
+  if (enteredPassword === adminPassword) {
+    const amountToAdd = 500;  // Jumlah grass yang ingin ditambahkan
+    grassCount += amountToAdd;
+    localStorage.setItem('grassCount', grassCount);
+    alert(`${amountToAdd} grass has been added!`);
+    updateDisplay();
+  } else {
+    alert('Incorrect password! You are not authorized to add grass.');
   }
 }
 
