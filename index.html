@@ -14,7 +14,7 @@
     <p id="currency" class="info">Currency: 0 Credits</p>
     <p id="grassCount" class="info">Grass: 0</p>
     <p id="timer" class="info">Next Grass Growth: 5s</p>
-    <p id="ggGems" class="info">GG GAME GEMS: 0</p>
+    <p id="ggGems" class="info">GG (GAME LOCK): 0</p>
 
     <table class="item-table">
       <thead>
@@ -34,7 +34,7 @@
           </td>
         </tr>
         <tr>
-          <td>Convert to GG GAME GEMS</td>
+          <td>EXCHANGE GG TO CREDITS</td>
           <td>-</td>
           <td>
             <button class="btn" onclick="convertGGToCredits()">Convert</button>
@@ -134,14 +134,14 @@
 
     // Mengonversi GG GAME GEMS ke Credits
 function convertGGToCredits() {
-  const conversionRate = 100;  // 1 GG Game Gem = 100 Credits
+  const conversionRate = 2000;  // 1 GG Game Gem = 100 Credits
   if (ggGems >= 1) {  // Mengecek apakah ada GG Game Gems untuk dikonversi
     const creditsToConvert = ggGems * conversionRate;  // Menghitung jumlah Credits yang akan diperoleh
     currency += creditsToConvert;  // Menambah Credits
     ggGems = 0;  // Mengosongkan GG Gems setelah konversi
     localStorage.setItem('currency', currency);  // Menyimpan Credits yang diperbarui
     localStorage.setItem('ggGems', ggGems);  // Menyimpan GG Gems yang diperbarui (jadi 0)
-    alert(`Anda mengonversi ${creditsToConvert} Credits dari GG GAME GEMS!`);  // Menampilkan pesan sukses
+    alert(`You Convert ${creditsToConvert} From GG TO CREDIT!`);  // Menampilkan pesan sukses
     updateDisplay();  // Memperbarui tampilan
   } else {
     alert('You dont have enough GG to Exchange.');  // Pesan jika tidak cukup GG Game Gems
