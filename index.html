@@ -126,6 +126,10 @@
   <div class="container">
     <h1>Grass Simulator - Futuristic Farming</h1>
 
+    <p id="currency">Currency: 1000 Credits</p>
+    <p id="grassCount">Grass: 0</p>
+    <p id="timer">Next Grass Growth: 5s</p>
+
     <!-- Table of Items (Only Grass for now) -->
     <table class="item-table">
       <thead>
@@ -149,15 +153,58 @@
   </div>
 
   <script>
-    function buyItem(item, price) {
-      alert(`You bought 1 ${item} for ${price} credits.`);
-      // Add logic for purchasing here (e.g., update currency or inventory)
+    let currency = 1000;
+    let grassCount = 0;
+    let grassGrowthTime = 5; // seconds for grass to grow
+
+    // Update the displayed values
+    function updateDisplay() {
+      document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
+      document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
+      document.getElementById('timer').textContent = `Next Grass Growth: ${grassGrowthTime}s`;
     }
 
-    function sellItem(item, price) {
-      alert(`You sold 1 ${item} for ${price} credits.`);
-      // Add logic for selling here (e.g., update currency or inventory)
+    // Function for growing grass over time
+    function growGrass() {
+      setInterval(() => {
+        if (grassGrowthTime > 0) {
+          grassGrowthTime--;
+          updateDisplay();
+        } else {
+          grassCount++;
+          grassGrowthTime = 5; // Reset timer after growing grass
+          alert('Grass has grown! You can collect it now.');
+          updateDisplay();
+        }
+      }, 1000);
     }
+
+    // Logic for buying grass
+    function buyItem(item, price) {
+      if (currency >= price) {
+        currency -= price;
+        grassCount++;
+        alert(`You bought 1 ${item} for ${price} credits.`);
+        updateDisplay();
+      } else {
+        alert('Not enough credits to buy.');
+      }
+    }
+
+    // Logic for selling grass
+    function sellItem(item, price) {
+      if (grassCount > 0) {
+        currency += price;
+        grassCount--;
+        alert(`You sold 1 ${item} for ${price} credits.`);
+        updateDisplay();
+      } else {
+        alert('You have no grass to sell.');
+      }
+    }
+
+    // Start growing grass when the page loads
+    growGrass();
   </script>
 
 </body>
