@@ -14,7 +14,21 @@ body {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  position: relative;
   background: radial-gradient(circle, rgba(13, 13, 13, 1) 0%, rgba(5, 5, 5, 1) 100%);
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('https://source.unsplash.com/1600x900/?galaxy,space') no-repeat center center fixed;
+  background-size: cover;
+  z-index: -1;
+  animation: starfield 50s infinite linear;
 }
 
 .container {
@@ -118,6 +132,15 @@ h1 {
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes starfield {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 5000px 5000px;
   }
 }
 
