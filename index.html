@@ -82,8 +82,12 @@
       document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
       document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
       document.getElementById('ggGems').textContent = `GG (GAME LOCK): ${ggGems}`;
-      document.getElementById('timer').textContent = `Next Grass Growth: ${Math.max(0, 5 - Math.floor((Date.now() - lastGrowthTime) / 1000))}s`;
-
+      
+      // Menghitung waktu yang tersisa untuk pertumbuhan rumput berdasarkan lastGrowthTime yang disimpan
+      const elapsedTime = Math.floor((Date.now() - lastGrowthTime) / 1000); 
+      const remainingTime = Math.max(0, 5 - elapsedTime);
+      document.getElementById('timer').textContent = `Next Grass Growth: ${remainingTime}s`;
+      
       // Menyimpan data terbaru ke localStorage
       localStorage.setItem('currency', currency);
       localStorage.setItem('grassCount', grassCount);
@@ -98,30 +102,29 @@
     }
 
     // Fungsi untuk memperbarui timer dan menambah rumput
-function updateTimer() {
-  const elapsedTime = Math.floor((Date.now() - lastGrowthTime) / 1000); // Hitung waktu yang telah berlalu
-  const remainingTime = Math.max(0, 5 - elapsedTime); // Hitung waktu yang tersisa
+    function updateTimer() {
+      const elapsedTime = Math.floor((Date.now() - lastGrowthTime) / 1000); // Hitung waktu yang telah berlalu
+      const remainingTime = Math.max(0, 5 - elapsedTime); // Hitung waktu yang tersisa hingga pertumbuhan rumput berikutnya
 
-  if (remainingTime === 0) {
-    grassCount += grassGrowthRate; // Tambah rumput
-    lastGrowthTime = Date.now();  // Update waktu terakhir pertumbuhan
-    saveTimer(); // Simpan ke localStorage
-    updateDisplay(); // Perbarui tampilan
-  }
-  
-  // Perbarui tampilan timer setiap detik
-  document.getElementById('timer').textContent = `Next Grass Growth: ${remainingTime}s`;
-}
-
-// Memulai timer dan pertumbuhan rumput
-function growGrass() {
-  setInterval(() => {
-    if (isAlive) {
-      updateTimer(); // Update timer setiap detik
+      if (remainingTime === 0) {
+        grassCount += grassGrowthRate; // Tambah rumput
+        lastGrowthTime = Date.now();  // Update waktu terakhir pertumbuhan
+        saveTimer(); // Simpan ke localStorage
+        updateDisplay(); // Perbarui tampilan
+      }
+      
+      // Perbarui tampilan timer setiap detik
+      document.getElementById('timer').textContent = `Next Grass Growth: ${remainingTime}s`;
     }
-  }, 1000); // Cek setiap detik
-}
 
+    // Memulai timer dan pertumbuhan rumput
+    function growGrass() {
+      setInterval(() => {
+        if (isAlive) {
+          updateTimer(); // Update timer setiap detik
+        }
+      }, 1000); // Cek setiap detik
+    }
 
     // Fungsi untuk membeli rumput dengan GG
     function buyGrassWithGG() {
