@@ -87,18 +87,21 @@
     // Grass growth mechanism
     function growGrass() {
       setInterval(() => {
-        if (grassGrowthTime > 0) {
-          grassGrowthTime--;
-          updateDisplay();
-        } else {
-          if (grassCount >= 1000) {
-            grassGrowthRate = 0.5;
-          } else if (grassCount >= 200) {
-            grassGrowthRate = 0.1;
+        if (isAlive) { // Only grow grass if the player is alive
+          if (grassGrowthTime > 0) {
+            grassGrowthTime--;
+            updateDisplay();
+          } else {
+            if (grassCount >= 1000) {
+              grassGrowthRate = 0.5;
+            } else if (grassCount >= 200) {
+              grassGrowthRate = 0.1;
+            }
+            grassCount += grassGrowthRate;
+            grassGrowthTime = 5;
+            localStorage.setItem('grassCount', grassCount); // Save the updated grassCount
+            updateDisplay();
           }
-          grassCount += grassGrowthRate;
-          grassGrowthTime = 5;
-          updateDisplay();
         }
       }, 1000);
     }
