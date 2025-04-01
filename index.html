@@ -78,11 +78,12 @@
 
     // Update display
     function updateDisplay() {
-      document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
-      document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
-      document.getElementById('timer').textContent = `Next Grass Growth: ${grassGrowthTime}s`;
-      document.getElementById('ggGems').textContent = `GG GAME GEMS: ${ggGems}`;
-    }
+  document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
+  document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;  // Ini memastikan grassCount ditampilkan
+  document.getElementById('timer').textContent = `Next Grass Growth: ${grassGrowthTime}s`;
+  document.getElementById('ggGems').textContent = `GG GAME GEMS: ${ggGems}`;
+}
+
 
     // Grass growth mechanism
     function growGrass() {
