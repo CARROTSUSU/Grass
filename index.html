@@ -74,7 +74,7 @@
     let ggGems = parseInt(localStorage.getItem('ggGems')) || 0;
     let grassCount = parseInt(localStorage.getItem('grassCount')) || 0;
     let lastGrowthTime = parseInt(localStorage.getItem('lastGrowthTime')) || Date.now(); // Waktu terakhir pertumbuhan rumput
-    let grassGrowthRate = 0.01;  // Tingkat pertumbuhan rumput (tambahan rumput setiap interval)
+    let grassGrowthRate = parseFloat(localStorage.getItem('grassGrowthRate')) || 0.01;  // Nilai default 0.01 jika tidak ada di localStorage
     let isAlive = localStorage.getItem('isAlive') === 'true';
 
     // Fungsi untuk memperbarui tampilan informasi
@@ -82,6 +82,7 @@
       document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
       document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
       document.getElementById('ggGems').textContent = `GG (GAME LOCK): ${ggGems}`;
+      document.getElementById('timer').textContent = `Next Grass Growth: ${Math.max(0, 5 - Math.floor((Date.now() - lastGrowthTime) / 1000))}s`;
       
       // Menghitung waktu yang tersisa untuk pertumbuhan rumput berdasarkan lastGrowthTime yang disimpan
       const elapsedTime = Math.floor((Date.now() - lastGrowthTime) / 1000); 
@@ -116,6 +117,13 @@
       // Perbarui tampilan timer setiap detik
       document.getElementById('timer').textContent = `Next Grass Growth: ${remainingTime}s`;
     }
+    
+    // Fungsi untuk mengubah grassGrowthRate (misalnya dengan event atau pengaturan lainnya)
+function setGrassGrowthRate(newRate) {
+  grassGrowthRate = newRate; // Ubah nilai grassGrowthRate
+  localStorage.setItem('grassGrowthRate', grassGrowthRate);  // Simpan ke localStorage
+  updateDisplay(); // Perbarui tampilan dengan nilai baru
+}
 
     // Memulai timer dan pertumbuhan rumput
     function growGrass() {
