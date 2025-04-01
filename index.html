@@ -92,6 +92,12 @@
       localStorage.setItem('lastGrowthTime', lastGrowthTime);
     }
 
+    // Fungsi untuk menyimpan grassCount ke localStorage
+function saveGrassCount() {
+  localStorage.setItem('grassCount', grassCount);
+}
+    
+
     // Fungsi untuk pertumbuhan rumput
     function growGrass() {
       setInterval(() => {
