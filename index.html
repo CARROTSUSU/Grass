@@ -91,6 +91,14 @@
       localStorage.setItem('isAlive', isAlive);
       localStorage.setItem('lastGrowthTime', lastGrowthTime);
     }
+    // Fungsi untuk menambah jumlah grassCount
+function addGrass(count) {
+  grassCount += count;
+  // Menyimpan nilai grassCount terbaru di localStorage
+  localStorage.setItem('grassCount', grassCount);
+  // Memperbarui tampilan informasi
+  updateDisplay();
+}
 
     // Fungsi untuk menyimpan lastGrowthTime (timer) ke localStorage
     function saveTimer() {
