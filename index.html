@@ -66,16 +66,9 @@
 
     <p id="status" class="info">Status: Stay ALIVE</p>
     <button id="aliveBtn" class="btn" onclick="toggleAlive()">Stay ALIVE</button>
-    
-    <input type="number" id="growthRateInput" value="0.01" />
-    <button onclick="updateGrowthRate()">Set Growth Rate</button>
   </div>
 
   <script>
-    function updateGrowthRate() {
-    const newRate = parseFloat(document.getElementById('growthRateInput').value);
-    setGrassGrowthRate(newRate);  // Mengubah nilai growthRate dan menyimpannya
-    }
     // Mengambil data dari localStorage atau menetapkan nilai default
     let currency = parseInt(localStorage.getItem('currency')) || 0;
     let ggGems = parseInt(localStorage.getItem('ggGems')) || 0;
@@ -90,11 +83,6 @@
       document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
       document.getElementById('ggGems').textContent = `GG (GAME LOCK): ${ggGems}`;
       document.getElementById('timer').textContent = `Next Grass Growth: ${Math.max(0, 5 - Math.floor((Date.now() - lastGrowthTime) / 1000))}s`;
-      
-      // Menghitung waktu yang tersisa untuk pertumbuhan rumput berdasarkan lastGrowthTime yang disimpan
-      const elapsedTime = Math.floor((Date.now() - lastGrowthTime) / 1000); 
-      const remainingTime = Math.max(0, 5 - elapsedTime);
-      document.getElementById('timer').textContent = `Next Grass Growth: ${remainingTime}s`;
       
       // Menyimpan data terbaru ke localStorage
       localStorage.setItem('currency', currency);
@@ -126,11 +114,11 @@
     }
     
     // Fungsi untuk mengubah grassGrowthRate (misalnya dengan event atau pengaturan lainnya)
-function setGrassGrowthRate(newRate) {
-  grassGrowthRate = newRate; // Ubah nilai grassGrowthRate
-  localStorage.setItem('grassGrowthRate', grassGrowthRate);  // Simpan ke localStorage
-  updateDisplay(); // Perbarui tampilan dengan nilai baru
-}
+    function setGrassGrowthRate(newRate) {
+      grassGrowthRate = newRate; // Ubah nilai grassGrowthRate
+      localStorage.setItem('grassGrowthRate', grassGrowthRate);  // Simpan ke localStorage
+      updateDisplay(); // Perbarui tampilan dengan nilai baru
+    }
 
     // Memulai timer dan pertumbuhan rumput
     function growGrass() {
@@ -260,9 +248,11 @@ function setGrassGrowthRate(newRate) {
     }
 
     // Memulai timer dan pertumbuhan rumput
-    growGrass();
-    updateDisplay();  // Memperbarui tampilan saat pertama kali dimuat
-    updateAliveStatus();  // Memperbarui status hidup saat pertama kali dimuat
+    window.onload = function() {
+      growGrass();
+      updateDisplay();  // Memperbarui tampilan saat pertama kali dimuat
+      updateAliveStatus();  // Memperbarui status hidup saat pertama kali dimuat
+    };
   </script>
 
 </body>
