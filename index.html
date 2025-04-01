@@ -66,9 +66,16 @@
 
     <p id="status" class="info">Status: Stay ALIVE</p>
     <button id="aliveBtn" class="btn" onclick="toggleAlive()">Stay ALIVE</button>
+    
+    <input type="number" id="growthRateInput" value="0.01" />
+    <button onclick="updateGrowthRate()">Set Growth Rate</button>
   </div>
 
   <script>
+    function updateGrowthRate() {
+    const newRate = parseFloat(document.getElementById('growthRateInput').value);
+    setGrassGrowthRate(newRate);  // Mengubah nilai growthRate dan menyimpannya
+    }
     // Mengambil data dari localStorage atau menetapkan nilai default
     let currency = parseInt(localStorage.getItem('currency')) || 0;
     let ggGems = parseInt(localStorage.getItem('ggGems')) || 0;
