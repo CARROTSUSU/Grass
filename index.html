@@ -74,64 +74,52 @@
     let ggGems = parseInt(localStorage.getItem('ggGems')) || 0;
     let grassCount = parseInt(localStorage.getItem('grassCount')) || 0;
     let lastGrowthTime = parseInt(localStorage.getItem('lastGrowthTime')) || Date.now(); // Waktu terakhir pertumbuhan rumput
-    let grassGrowthRate = parseFloat(localStorage.getItem('grassGrowthRate')) || 0.01;  // Tingkat pertumbuhan rumput
+    let grassGrowthRate = 0.01;  // Tingkat pertumbuhan rumput (tambahan rumput setiap interval)
     let isAlive = localStorage.getItem('isAlive') === 'true';
 
-    // Fungsi untuk menyimpan semua data ke localStorage
-    function save() {
+    // Fungsi untuk memperbarui tampilan informasi
+    function updateDisplay() {
+      document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
+      document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
+      document.getElementById('ggGems').textContent = `GG (GAME LOCK): ${ggGems}`;
+      document.getElementById('timer').textContent = `Next Grass Growth: ${Math.max(0, 5 - Math.floor((Date.now() - lastGrowthTime) / 1000))}s`;
+
+      // Menyimpan data terbaru ke localStorage
       localStorage.setItem('currency', currency);
       localStorage.setItem('grassCount', grassCount);
       localStorage.setItem('ggGems', ggGems);
-      localStorage.setItem('grassGrowthRate', grassGrowthRate);
       localStorage.setItem('isAlive', isAlive);
       localStorage.setItem('lastGrowthTime', lastGrowthTime);
     }
 
-    // Fungsi untuk memperbarui tampilan informasi
-    function updateDisplay() {
-      // Menghitung sisa waktu pertumbuhan rumput
-      const elapsedTime = Math.floor((Date.now() - lastGrowthTime) / 1000); // Hitung detik yang telah berlalu
-      const timeLeft = Math.max(0, 5 - elapsedTime);  // Hitung waktu yang tersisa (sampai 5 detik)
+    // Fungsi untuk menyimpan lastGrowthTime (timer) ke localStorage
+    function saveTimer() {
+      localStorage.setItem('lastGrowthTime', lastGrowthTime);
+    }
+
+    // Fungsi untuk memperbarui timer dan menambah rumput
+    function updateTimer() {
+      const elapsedTime = Math.floor((Date.now() - lastGrowthTime) / 1000); // Hitung waktu yang telah berlalu sejak pertumbuhan terakhir
+      const remainingTime = Math.max(0, 5 - elapsedTime); // Waktu yang tersisa hingga pertumbuhan rumput berikutnya
+
+      if (remainingTime === 0) {
+        grassCount += grassGrowthRate; // Tambahkan rumput setiap 5 detik
+        lastGrowthTime = Date.now(); // Perbarui waktu terakhir pertumbuhan
+        saveTimer(); // Simpan waktu terakhir pertumbuhan ke localStorage
+        updateDisplay(); // Perbarui tampilan
+      }
       
-      // Memperbarui elemen tampilan dengan informasi terbaru
-      document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
-      document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
-      document.getElementById('ggGems').textContent = `GG (GAME LOCK): ${ggGems}`;
-      document.getElementById('timer').textContent = `Next Grass Growth: ${timeLeft}s`;
-
-      // Menyimpan data terbaru ke localStorage
-      save(); // Memanggil fungsi save() untuk menyimpan data setiap kali tampilan diperbarui
-    }
-
-    // Fungsi untuk menyimpan grassCount ke localStorage
-    function saveGrassCount() {
-      localStorage.setItem('grassCount', grassCount);
-    }
-
-    // Fungsi untuk menyimpan grassGrowthRate ke localStorage
-    function saveGrassGrowthRate() {
-      localStorage.setItem('grassGrowthRate', grassGrowthRate);
-    }
-
-    // Fungsi untuk memperbarui grassGrowthRate (misalnya, menambahnya atau mengubahnya)
-    function updateGrassGrowthRate(newRate) {
-      grassGrowthRate = newRate;  // Mengubah nilai grassGrowthRate
-      saveGrassGrowthRate();  // Menyimpan nilai terbaru ke localStorage
-      updateDisplay();  // Memperbarui tampilan
+      // Perbarui tampilan timer setiap detik
+      document.getElementById('timer').textContent = `Next Grass Growth: ${remainingTime}s`;
     }
 
     // Fungsi untuk pertumbuhan rumput
     function growGrass() {
       setInterval(() => {
         if (isAlive) {
-          const elapsedTime = Math.floor((Date.now() - lastGrowthTime) / 1000); // Hitung waktu yang telah berlalu sejak pertumbuhan terakhir
-          if (elapsedTime >= 5) { // Cek apakah sudah 5 detik
-            grassCount += grassGrowthRate;  // Tambahkan rumput
-            lastGrowthTime = Date.now();  // Perbarui waktu terakhir pertumbuhan
-            updateDisplay();  // Memperbarui tampilan
-          }
+          updateTimer(); // Perbarui timer dan pertumbuhan rumput
         }
-      }, 1000);  // Cek setiap detik
+      }, 1000); // Cek setiap detik
     }
 
     // Fungsi untuk membeli rumput dengan GG
@@ -142,7 +130,8 @@
       if (ggGems >= priceInGG) {  // Mengecek apakah GG cukup
         ggGems -= priceInGG;  // Mengurangi GG Game Gems
         grassCount += grassToBuy;  // Menambah rumput
-        save(); // Simpan perubahan ke localStorage
+        localStorage.setItem('ggGems', ggGems);
+        localStorage.setItem('grassCount', grassCount);
         alert(`You bought ${grassToBuy} grass with 1 GG.`);
         updateDisplay();
       } else {
@@ -158,7 +147,8 @@
         const ggGemsEarned = Math.floor(grassCount / sellRate);  // Menghitung GG Gems yang didapat
         grassCount -= ggGemsEarned * sellRate;  // Mengurangi rumput yang dijual
         ggGems += ggGemsEarned;  // Menambah GG Gems yang diperoleh
-        save(); // Simpan perubahan ke localStorage
+        localStorage.setItem('ggGems', ggGems);
+        localStorage.setItem('grassCount', grassCount);
         alert(`You sold ${ggGemsEarned * sellRate} ${item} for ${ggGemsEarned} GG Game Gems.`);
         updateDisplay();
       } else {
@@ -173,7 +163,8 @@
         const creditsToConvert = ggGems * conversionRate;  // Menghitung jumlah Credits yang didapat
         currency += creditsToConvert;  // Menambah Credits
         ggGems = 0;  // Mengosongkan GG Gems setelah konversi
-        save(); // Simpan perubahan ke localStorage
+        localStorage.setItem('currency', currency);
+        localStorage.setItem('ggGems', ggGems);
         alert(`You got ${creditsToConvert} Credits from swapping GG.`);
         updateDisplay();
       } else {
@@ -189,7 +180,7 @@
       if (enteredPassword === adminPassword) {
         const amountToAdd = 500;
         grassCount += amountToAdd;
-        save(); // Simpan perubahan ke localStorage
+        localStorage.setItem('grassCount', grassCount);
         alert(`${amountToAdd} grass has been added!`);
         updateDisplay();
       } else {
@@ -203,42 +194,57 @@
       currency = 0;
       ggGems = 0;
       lastGrowthTime = Date.now(); // Reset waktu pertumbuhan
-      save(); // Simpan perubahan ke localStorage
-      updateDisplay(); // Memperbarui tampilan
+      localStorage.setItem('currency', currency);
+      localStorage.setItem('grassCount', grassCount);
+      localStorage.setItem('ggGems', ggGems);
+      alert('Data has been reset!');
+      updateDisplay();
     }
 
     // Fungsi admin untuk reset semua data
     function adminResetAll() {
       const adminPassword = "admin123";
-      const enteredPassword = prompt("Please enter the admin password to reset all data:");
+      const enteredPassword = prompt("Enter admin password to reset everything:");
 
       if (enteredPassword === adminPassword) {
+        grassCount = 0;
         currency = 0;
         ggGems = 0;
-        grassCount = 0;
         lastGrowthTime = Date.now();  // Reset waktu pertumbuhan
-        grassGrowthRate = 0.01; // Reset rate ke nilai awal
-        isAlive = true; // Reset status kehidupan
-        save(); // Simpan perubahan ke localStorage
+        localStorage.clear();  // Clear all data from localStorage
         alert('All data has been reset!');
-        updateDisplay(); // Memperbarui tampilan
+        updateDisplay();
       } else {
         alert('Incorrect password!');
       }
     }
 
-    // Fungsi untuk mengubah status hidup
-    function toggleAlive() {
-      isAlive = !isAlive;
-      document.getElementById('status').textContent = isAlive ? 'Status: Stay ALIVE' : 'Status: DEAD';
-      save(); // Simpan status hidup ke localStorage
-      updateDisplay(); // Memperbarui tampilan
+    // Fungsi untuk memperbarui status hidup
+    function updateAliveStatus() {
+      const statusElement = document.getElementById('status');
+      const aliveBtn = document.getElementById('aliveBtn');
+
+      if (isAlive) {
+        statusElement.textContent = 'Status: Stay ALIVE';
+        aliveBtn.textContent = 'Stay ALIVE';
+      } else {
+        statusElement.textContent = 'Status: DEAD';
+        aliveBtn.textContent = 'Stay DEAD';
+      }
     }
 
-    // Memulai simulasi pertumbuhan rumput saat halaman dimuat
-    growGrass();
-    updateDisplay();
+    // Fungsi untuk toggle status hidup
+    function toggleAlive() {
+      isAlive = !isAlive;
+      localStorage.setItem('isAlive', isAlive);
+      updateAliveStatus();
+    }
 
+    // Memulai timer dan pertumbuhan rumput
+    growGrass();
+    updateDisplay();  // Memperbarui tampilan saat pertama kali dimuat
+    updateAliveStatus();  // Memperbarui status hidup saat pertama kali dimuat
   </script>
+
 </body>
 </html>
