@@ -47,7 +47,6 @@
             <button class="btn" onclick="adminAddGrass()">Add Grass</button>
           </td>
         </tr>
-        <!-- Add the new buttons here -->
         <tr>
           <td>Reset</td>
           <td>-</td>
@@ -70,14 +69,15 @@
   </div>
 
   <script>
+    // Mengambil data dari localStorage atau menetapkan nilai default
     let currency = parseInt(localStorage.getItem('currency')) || 0;
     let ggGems = parseInt(localStorage.getItem('ggGems')) || 0;
     let grassCount = parseInt(localStorage.getItem('grassCount')) || 0;
     let lastGrowthTime = parseInt(localStorage.getItem('lastGrowthTime')) || Date.now(); // Waktu terakhir pertumbuhan rumput
-    let grassGrowthRate = 0.01;
+    let grassGrowthRate = 0.01;  // Tingkat pertumbuhan rumput (tambahan rumput setiap interval)
     let isAlive = localStorage.getItem('isAlive') === 'true';
-    
-    // Fungsi untuk memperbarui tampilan
+
+    // Fungsi untuk memperbarui tampilan informasi
     function updateDisplay() {
       document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
       document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
@@ -92,7 +92,7 @@
       localStorage.setItem('lastGrowthTime', lastGrowthTime);
     }
 
-    // Fungsi pertumbuhan rumput
+    // Fungsi untuk pertumbuhan rumput
     function growGrass() {
       setInterval(() => {
         if (isAlive) {
@@ -103,7 +103,7 @@
             updateDisplay();  // Memperbarui tampilan
           }
         }
-      }, 1000);
+      }, 1000);  // Cek setiap detik
     }
 
     // Fungsi untuk membeli rumput dengan GG
