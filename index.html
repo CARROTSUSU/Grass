@@ -47,6 +47,7 @@
             <button class="btn" onclick="adminAddGrass()">Add Grass</button>
           </td>
         </tr>
+        <!-- Add the new buttons here -->
         <tr>
           <td>Reset</td>
           <td>-</td>
@@ -72,42 +73,40 @@
     let currency = parseInt(localStorage.getItem('currency')) || 0;
     let ggGems = parseInt(localStorage.getItem('ggGems')) || 0;
     let grassCount = parseInt(localStorage.getItem('grassCount')) || 0;
+    let lastGrowthTime = parseInt(localStorage.getItem('lastGrowthTime')) || Date.now(); // Waktu terakhir pertumbuhan rumput
     let grassGrowthRate = 0.01;
-    let grassGrowthTime = 5;
-    let isAlive = localStorage.getItem('isAlive') === 'true'; // Cek status hidup dari localStorage
-
-    // Update display
+    let isAlive = localStorage.getItem('isAlive') === 'true';
+    
+    // Fungsi untuk memperbarui tampilan
     function updateDisplay() {
-  document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
-  document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;  // Ini memastikan grassCount ditampilkan
-  document.getElementById('timer').textContent = `Next Grass Growth: ${grassGrowthTime}s`;
-  document.getElementById('ggGems').textContent = `GG (Game Lock: ${ggGems}`;
-}
+      document.getElementById('currency').textContent = `Currency: ${currency} Credits`;
+      document.getElementById('grassCount').textContent = `Grass: ${grassCount}`;
+      document.getElementById('ggGems').textContent = `GG (GAME LOCK): ${ggGems}`;
+      document.getElementById('timer').textContent = `Next Grass Growth: ${Math.max(0, 5 - Math.floor((Date.now() - lastGrowthTime) / 1000))}s`;
 
+      // Menyimpan data terbaru ke localStorage
+      localStorage.setItem('currency', currency);
+      localStorage.setItem('grassCount', grassCount);
+      localStorage.setItem('ggGems', ggGems);
+      localStorage.setItem('isAlive', isAlive);
+      localStorage.setItem('lastGrowthTime', lastGrowthTime);
+    }
 
-    // Grass growth mechanism
+    // Fungsi pertumbuhan rumput
     function growGrass() {
       setInterval(() => {
-        if (isAlive) { // Only grow grass if the player is alive
-          if (grassGrowthTime > 0) {
-            grassGrowthTime--;
-            updateDisplay();
-          } else {
-            if (grassCount >= 1000) {
-              grassGrowthRate = 0.5;
-            } else if (grassCount >= 200) {
-              grassGrowthRate = 0.1;
-            }
-            grassCount += grassGrowthRate;
-            grassGrowthTime = 5;
-            localStorage.setItem('grassCount', grassCount); // Save the updated grassCount
-            updateDisplay();
+        if (isAlive) {
+          const elapsedTime = Math.floor((Date.now() - lastGrowthTime) / 1000); // Hitung waktu yang telah berlalu sejak pertumbuhan terakhir
+          if (elapsedTime >= 5) { // Cek apakah sudah 5 detik
+            grassCount += grassGrowthRate;  // Tambahkan rumput
+            lastGrowthTime = Date.now();  // Perbarui waktu terakhir pertumbuhan
+            updateDisplay();  // Memperbarui tampilan
           }
         }
       }, 1000);
     }
 
-    // Buy Grass with GG
+    // Fungsi untuk membeli rumput dengan GG
     function buyGrassWithGG() {
       const priceInGG = 1;  // 1 GG Game Gem untuk 200 rumput
       const grassToBuy = 200;
@@ -117,47 +116,47 @@
         grassCount += grassToBuy;  // Menambah rumput
         localStorage.setItem('ggGems', ggGems);
         localStorage.setItem('grassCount', grassCount);
-        alert(`You bought ${grassToBuy} for grass with 1 GG.`);
+        alert(`You bought ${grassToBuy} grass with 1 GG.`);
         updateDisplay();
       } else {
         alert('You do not have enough GG');
       }
     }
 
-    // Selling items and converting them into GG Game Gems
+    // Fungsi untuk menjual rumput dan mengubahnya menjadi GG Gems
     function sellItem(item, price) {
-      const sellRate = 1000;  // 1000 grass for 1 GG Game Gem
+      const sellRate = 1000;  // 1000 grass untuk 1 GG Game Gem
 
-      if (grassCount >= sellRate) {  // Check if you have enough grass
-        const ggGemsEarned = Math.floor(grassCount / sellRate);  // Calculate how many GG Gems you will earn
-        grassCount -= ggGemsEarned * sellRate;  // Deduct the amount of grass sold
-        ggGems += ggGemsEarned;  // Add the earned GG Gems
-        localStorage.setItem('ggGems', ggGems);  // Save the updated GG Gems in localStorage
-        localStorage.setItem('grassCount', grassCount);  // Save the updated grass count in localStorage
-        alert(`You sold ${ggGemsEarned * sellRate} ${item} for ${ggGemsEarned} GG Game Gems.`);  // Success message
-        updateDisplay();  // Update the display
+      if (grassCount >= sellRate) {  // Mengecek apakah cukup rumput
+        const ggGemsEarned = Math.floor(grassCount / sellRate);  // Menghitung GG Gems yang didapat
+        grassCount -= ggGemsEarned * sellRate;  // Mengurangi rumput yang dijual
+        ggGems += ggGemsEarned;  // Menambah GG Gems yang diperoleh
+        localStorage.setItem('ggGems', ggGems);
+        localStorage.setItem('grassCount', grassCount);
+        alert(`You sold ${ggGemsEarned * sellRate} ${item} for ${ggGemsEarned} GG Game Gems.`);
+        updateDisplay();
       } else {
-        alert('You do not have enough grass to sell.');  // Warning message if not enough grass
+        alert('You do not have enough grass to sell.');
       }
     }
 
-    // Convert GG to Credits
+    // Fungsi untuk mengonversi GG Gems ke Credits
     function convertGGToCredits() {
       const conversionRate = 2000;  // 1 GG Game Gem = 100 Credits
-      if (ggGems >= 1) {  // Mengecek apakah ada GG Game Gems untuk dikonversi
-        const creditsToConvert = ggGems * conversionRate;  // Menghitung jumlah Credits yang akan diperoleh
+      if (ggGems >= 1) {  // Mengecek apakah ada GG Gems untuk dikonversi
+        const creditsToConvert = ggGems * conversionRate;  // Menghitung jumlah Credits yang didapat
         currency += creditsToConvert;  // Menambah Credits
         ggGems = 0;  // Mengosongkan GG Gems setelah konversi
-        localStorage.setItem('currency', currency);  // Menyimpan Credits yang diperbarui
-        localStorage.setItem('ggGems', ggGems);  // Menyimpan GG Gems yang diperbarui (jadi 0)
-        alert(`You Get ${creditsToConvert} CREDITS From Swap!`);  // Menampilkan pesan sukses
-        updateDisplay();  // Memperbarui tampilan
+        localStorage.setItem('currency', currency);
+        localStorage.setItem('ggGems', ggGems);
+        alert(`You got ${creditsToConvert} Credits from swapping GG.`);
+        updateDisplay();
       } else {
-        alert('You dont have enough GG to Exchange.');  // Pesan jika tidak cukup GG Game Gems
+        alert('You do not have enough GG to exchange.');
       }
     }
 
-    // Admin function to add grass
+    // Fungsi admin untuk menambah rumput
     function adminAddGrass() {
       const adminPassword = "admin123";
       const enteredPassword = prompt("Please enter the admin password to add grass:");
@@ -169,15 +168,16 @@
         alert(`${amountToAdd} grass has been added!`);
         updateDisplay();
       } else {
-        alert('Incorrect password! You are not authorized to add grass.');
+        alert('Incorrect password!');
       }
     }
 
-    // Function to reset user data
+    // Fungsi untuk reset data pengguna
     function reset() {
       grassCount = 0;
       currency = 0;
       ggGems = 0;
+      lastGrowthTime = Date.now(); // Reset waktu pertumbuhan
       localStorage.setItem('currency', currency);
       localStorage.setItem('grassCount', grassCount);
       localStorage.setItem('ggGems', ggGems);
@@ -185,7 +185,7 @@
       updateDisplay();
     }
 
-    // Admin function to reset all data
+    // Fungsi admin untuk reset semua data
     function adminResetAll() {
       const adminPassword = "admin123";
       const enteredPassword = prompt("Enter admin password to reset everything:");
@@ -194,19 +194,16 @@
         grassCount = 0;
         currency = 0;
         ggGems = 0;
+        lastGrowthTime = Date.now();  // Reset waktu pertumbuhan
         localStorage.clear();  // Clear all data from localStorage
         alert('All data has been reset!');
         updateDisplay();
       } else {
-        alert('Incorrect password! You do not have permission to reset everything.');
+        alert('Incorrect password!');
       }
     }
 
-    // Initialize grass growth and display
-    growGrass();
-    updateDisplay();
-
-    // Fungsi untuk memperbarui status
+    // Fungsi untuk memperbarui status hidup
     function updateAliveStatus() {
       const statusElement = document.getElementById('status');
       const aliveBtn = document.getElementById('aliveBtn');
@@ -229,9 +226,10 @@
       updateAliveStatus(); // Perbarui tampilan
     }
 
-    // Memperbarui tampilan status saat pertama kali dimuat
-    updateAliveStatus();
-    
+    // Memulai pertumbuhan rumput
+    growGrass();
+    updateDisplay(); // Memperbarui tampilan saat pertama kali dimuat
+    updateAliveStatus(); // Memperbarui status hidup saat pertama kali dimuat
   </script>
 
 </body>
