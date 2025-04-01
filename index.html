@@ -101,6 +101,13 @@ function saveGrassGrowthRate() {
   localStorage.setItem('grassGrowthRate', grassGrowthRate);
 }
 
+// Fungsi untuk memperbarui grassGrowthRate (misalnya, menambahnya atau mengubahnya)
+function updateGrassGrowthRate(newRate) {
+  grassGrowthRate = newRate;  // Mengubah nilai grassGrowthRate
+  saveGrassGrowthRate();  // Menyimpan nilai terbaru ke localStorage
+  updateDisplay();  // Memperbarui tampilan
+}
+
     // Fungsi untuk pertumbuhan rumput
     function growGrass() {
       setInterval(() => {
