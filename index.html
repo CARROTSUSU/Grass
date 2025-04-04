@@ -92,11 +92,25 @@
       localStorage.setItem('lastGrowthTime', lastGrowthTime);
     }
 
-    // Fungsi untuk menambah jumlah grassCount
-    function addGrass(count) {
-      grassCount += count;
-      localStorage.setItem('grassCount', grassCount);
-      updateDisplay();
+    // Fungsi untuk memperbarui status hidup
+    function updateAliveStatus() {
+      const statusElement = document.getElementById('status');
+      const aliveBtn = document.getElementById('aliveBtn');
+
+      if (isAlive) {
+        statusElement.textContent = 'Status: Stay ALIVE';
+        aliveBtn.textContent = 'Stay ALIVE';
+      } else {
+        statusElement.textContent = 'Status: DEAD';
+        aliveBtn.textContent = 'Stay DEAD';
+      }
+    }
+
+    // Fungsi untuk toggle status hidup
+    function toggleAlive() {
+      isAlive = !isAlive;
+      localStorage.setItem('isAlive', isAlive);
+      updateAliveStatus();
     }
 
     // Fungsi untuk menyimpan lastGrowthTime (timer) ke localStorage
@@ -118,22 +132,6 @@
       
       // Perbarui tampilan timer setiap detik
       document.getElementById('timer').textContent = `Next Grass Growth: ${remainingTime}s`;
-    }
-    
-    // Fungsi untuk mengubah grassGrowthRate (misalnya dengan event atau pengaturan lainnya)
-    function setGrassGrowthRate(newRate) {
-      grassGrowthRate = newRate; // Ubah nilai grassGrowthRate
-      localStorage.setItem('grassGrowthRate', grassGrowthRate);  // Simpan ke localStorage
-      updateDisplay(); // Perbarui tampilan dengan nilai baru
-    }
-
-    // Memulai timer dan pertumbuhan rumput
-    function growGrass() {
-      setInterval(() => {
-        if (isAlive) {
-          updateTimer(); // Update timer setiap detik
-        }
-      }, 1000); // Cek setiap detik
     }
 
     // Fungsi untuk membeli rumput dengan GG
@@ -233,33 +231,17 @@
       }
     }
 
-    // Fungsi untuk memperbarui status hidup
-    function updateAliveStatus() {
-      const statusElement = document.getElementById('status');
-      const aliveBtn = document.getElementById('aliveBtn');
-
-      if (isAlive) {
-        statusElement.textContent = 'Status: Stay ALIVE';
-        aliveBtn.textContent = 'Stay ALIVE';
-      } else {
-        statusElement.textContent = 'Status: DEAD';
-        aliveBtn.textContent = 'Stay DEAD';
-      }
-    }
-
-    // Fungsi untuk toggle status hidup
-    function toggleAlive() {
-      isAlive = !isAlive;
-      localStorage.setItem('isAlive', isAlive);
-      updateAliveStatus();
-    }
-
     // Memulai timer dan pertumbuhan rumput
     window.onload = function() {
-      growGrass();
-      updateDisplay();  // Memperbarui tampilan saat pertama kali dimuat
-      updateAliveStatus();  // Memperbarui status hidup saat pertama kali dimuat
+      setInterval(() => {
+        if (isAlive) {
+          updateTimer(); // Update timer setiap detik
+        }
+      }, 1000);  // Setiap detik
     };
+    
+    updateDisplay();
+    updateAliveStatus();
   </script>
 
 </body>
